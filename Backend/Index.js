@@ -4,12 +4,10 @@ const express = require("express");
 connectToMongo();
 //Connected to Express Js
 const app = express();
-const port = 3000;
+const port = 5000;
 
 //basic app get response syntax
-app.get("/", (req, res) => {
-  res.send("Hello Zander!");
-});
+app.use(express.json())
 
 //using available routes
 app.use('/api/auth', require('./routes/auth'))
