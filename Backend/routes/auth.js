@@ -5,7 +5,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = 'zander@secretString'
+const JWT_SECRET = "zander@secretString";
 
 //creating a user using POST: "/api/auth/createuser"
 router.post(
@@ -34,26 +34,67 @@ router.post(
       }
       const salt = await bcrypt.genSalt(10);
 
-      const SafePass = await bcrypt.hash(req.body.password, salt)
+      const SafePass = await bcrypt.hash(req.body.password, salt);
       user = await User.create({
         name: req.body.name,
         email: req.body.email,
         password: SafePass,
       });
       const data = {
-        user:{
-          id: user.id
-        }
-      }
+        user: {
+          id: user.id,
+        },
+      };
       const authToken = jwt.sign(data, JWT_SECRET);
       res.json(authToken);
     } catch (error) {
       //To send unexpected errors
       console.error(error.message);
-      res.status(500).send("Some Error Occured");
+      res.status(500).send("Internal Server Error");
     }
   }
 );
+//creating a user part completed
 
+//Login EndPoint Of User
+router.post(
+  "/login",
+  [
+    body("email", "Enter The correct email").isEmail(),
+    body("password", "Enter The correct password").exists(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+    try {
+      let user = await User.findOne({ email });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ error: "Please Enter correct credentials" });
+      }
+      const passwordCompare = await bcrypt.compare(password, user.password); //It will compare the hashes internally and will return boolean value
+      if (!passwordCompare) {
+        return res
+          .status(400)
+          .json({ error: "Please Enter correct credentials" });
+      }
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET);
+      res.json(authToken);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
 module.exports = router;
 //Sample authentication token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQzOTg0ZGJhOTUxZWU3ZjFlNTZiN2M3In0sImlhdCI6MTY4MTQ5MTE2M30.3aK6Lw76OgQPI9dE-1a1rFA4WWLqo0c0-UKLqks1wLM"  the above token is separated by 3 dost, the last part is for signature and it is used to verify whether any of our user has modified the credential data using jwt.verify method
