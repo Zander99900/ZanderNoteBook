@@ -3,11 +3,12 @@ const User = require("../models/User");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+var jwt = require("jsonwebtoken");
+var fetchuser = require("../middleware/Fetchuser");
 
 const JWT_SECRET = "zander@secretString";
 
-//creating a user using POST: "/api/auth/createuser"
+//ROUTE 1: creating a user using POST: "/api/auth/createuser"
 router.post(
   "/createuser",
   [
@@ -46,7 +47,7 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json(authToken);
+      res.json({authToken});
     } catch (error) {
       //To send unexpected errors
       console.error(error.message);
@@ -56,7 +57,7 @@ router.post(
 );
 //creating a user part completed
 
-//Login EndPoint Of User
+//ROUTE 2: Login EndPoint Of User POST: "/api/auth/login"
 router.post(
   "/login",
   [
@@ -89,12 +90,23 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json(authToken);
+      res.json({authToken});
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error");
     }
   }
 );
+
+//ROUTE 3: Get logged in user details using POST: "/api/auth/getuser"
+router.post("/getuser", fetchuser, async (req, res) => {
+  try {
+    userid = req.user.id;
+    const user = await User.findById(userid).select("-password")
+    res.send(user)
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
 module.exports = router;
 //Sample authentication token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQzOTg0ZGJhOTUxZWU3ZjFlNTZiN2M3In0sImlhdCI6MTY4MTQ5MTE2M30.3aK6Lw76OgQPI9dE-1a1rFA4WWLqo0c0-UKLqks1wLM"  the above token is separated by 3 dost, the last part is for signature and it is used to verify whether any of our user has modified the credential data using jwt.verify method
