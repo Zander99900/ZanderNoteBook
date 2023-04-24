@@ -9,7 +9,7 @@ export const Alerts = (props) => {
     //The first 'props.alert &&' is used so that if initially the props.alert value is null then it will not move further and the function is stopped there only
     //This style height is used to reduce cls: cummulitive layout shift
     <div>
-      <div class="alert alert-primary" role="alert">
+      <div className="alert alert-primary" role="alert">
         {props.message}
       </div>
     </div>
