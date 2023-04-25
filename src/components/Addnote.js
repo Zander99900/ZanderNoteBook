@@ -13,7 +13,7 @@ const Addnote = () => {
 
   const onChange = (e) => {
     // The below line means: keep the value of note as it is but update the fields of event e's name & value
-    setNote({ ...note, [e.target.name]: [e.target.value] });
+    setNote({ ...note, [e.target.name]: e.target.value });
   };
 
   return (
