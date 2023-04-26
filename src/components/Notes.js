@@ -3,29 +3,37 @@ import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import Addnote from "./Addnote";
 
-//useRef is used to give reference to any element
-
 const Notes = () => {
   // fetching notes from contextAPI
   const context = useContext(noteContext);
-  const { notes, getNotes } = context;
+  const { notes, getNotes, editNote } = context;
   useEffect(() => {
     getNotes();
+    // eslint-disable-next-line
   }, []);
+  //useRef is used to give reference to any element
   const ref = useRef(null);
+  const refClose = useRef(null);
 
   const [note, setNote] = useState({
+    id: "",
     etitle: "",
     edescription: "",
-    etag: ""
+    etag: "",
   });
   const updateNote = (currentNote) => {
     ref.current.click();
-    setNote({etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag})
+    setNote({
+      id: currentNote._id,
+      etitle: currentNote.title,
+      edescription: currentNote.description,
+      etag: currentNote.tag,
+    });
   };
 
   const handleClick = (e) => {
-    e.preventDefault();
+    editNote(note.id, note.etitle, note.edescription, note.etag)
+    refClose.current.click();
   };
 
   const onChange = (e) => {
@@ -110,14 +118,15 @@ const Notes = () => {
             </div>
             <div className="modal-footer">
               <button
+                ref={refClose}
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
-                Save changes
+              <button onClick={handleClick} type="button" className="btn btn-primary">
+                Update Note
               </button>
             </div>
           </div>
