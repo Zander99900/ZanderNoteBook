@@ -42,6 +42,7 @@ const Addnote = () => {
             onChange={onChange}
             minLength={5}
             required
+            placeholder="Title Must be 5 characters long"
           />
         </div>
         <div className="mb-3">
@@ -57,6 +58,7 @@ const Addnote = () => {
             onChange={onChange}
             minLength={5}
             required
+            placeholder="Description Must be 5 characters long"
           />
         </div>
         <div className="mb-3">
@@ -72,6 +74,7 @@ const Addnote = () => {
             onChange={onChange}
             minLength={5}
             required
+            placeholder="Tag Must be 5 characters long"
           />
         </div>
         <button
