@@ -33,17 +33,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }), // body data type must match "Content-Type" header
     });
-    const json = await response.json(); // parses JSON response into native JavaScript objects
-    console.log(json)
-    const note = {
-      _id: "643e383069607798c686cffc3c",
-      user: "643984dba951ee7f1e56b7c7",
-      title: title,
-      description: description,
-      tag: tag,
-      timestamp: "2023-04-18T06:26:56.155Z",
-      __v: 0,
-    };
+    const note = await response.json(); // parses JSON response into native JavaScript objects
     setNotes(notes.concat(note));
   };
 
@@ -56,10 +46,10 @@ const NoteState = (props) => {
         "Content-Type": "application/json",
         "auth-token":
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQzOTg0ZGJhOTUxZWU3ZjFlNTZiN2M3In0sImlhdCI6MTY4MTU3MjE5OX0.UvXk-t2o6mtpTQy7wvJSHf02Liye1YwNYNnahxi5Pa4",
-      }
+      },
     });
-    const json = await response.json(); // parses JSON response into native JavaScript objects
-    console.log(json)
+    const json = await response.json() // eslint-disable-line no-unused-vars
+    //parses JSON response into native JavaScript objects
     const newNotes = notes.filter((note) => {
       return note._id !== id;
     });
@@ -79,9 +69,9 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }), // body data type must match "Content-Type" header
     });
     const json = await response.json(); // parses JSON response into native JavaScript objects
-    console.log(json)
+    console.log(json);
     //Logic to edit note
-    let newNotes = JSON.parse(JSON.stringify(notes))
+    let newNotes = JSON.parse(JSON.stringify(notes));
     for (let index = 0; index < newNotes.length; index++) {
       const element = newNotes[index];
       if (element._id === id) {
@@ -93,7 +83,7 @@ const NoteState = (props) => {
     }
     setNotes(newNotes);
   };
-  
+
   return (
     <noteContext.Provider
       value={{ notes, addNote, deleteNote, editNote, getNotes }}

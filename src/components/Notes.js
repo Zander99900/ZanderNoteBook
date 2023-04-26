@@ -32,7 +32,7 @@ const Notes = () => {
   };
 
   const handleClick = (e) => {
-    editNote(note.id, note.etitle, note.edescription, note.etag)
+    editNote(note.id, note.etitle, note.edescription, note.etag);
     refClose.current.click();
   };
 
@@ -86,6 +86,8 @@ const Notes = () => {
                     name="etitle"
                     value={note.etitle}
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -99,6 +101,8 @@ const Notes = () => {
                     name="edescription"
                     value={note.edescription}
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -125,7 +129,12 @@ const Notes = () => {
               >
                 Close
               </button>
-              <button onClick={handleClick} type="button" className="btn btn-primary">
+              <button
+              disabled={note.etitle.length < 5 || note.edescription.length < 5}
+                onClick={handleClick}
+                type="button"
+                className="btn btn-primary"
+              >
                 Update Note
               </button>
             </div>
