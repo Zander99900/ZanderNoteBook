@@ -22,16 +22,17 @@ router.post(
     ),
   ],
   async (req, res) => {
+    let success = false;
     //IF there are errors, return bad request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success, errors: errors.array() });
     }
     try {
       //check whether the user with same email exists already
       let user = await User.findOne({ email: req.body.email });
       if (user) {
-        return res.status(400).json({ error: "Sorry a bad request " });
+        return res.status(400).json({ success, error: "Sorry a bad request " });
       }
       const salt = await bcrypt.genSalt(10);
 
@@ -47,9 +48,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-
-      res.json({ authToken });
-
+      success = true;
+      res.json({ success, authToken });
     } catch (error) {
       //To send unexpected errors
       console.error(error.message);
@@ -67,7 +67,7 @@ router.post(
     body("password", "Enter The correct password").exists(),
   ],
   async (req, res) => {
-    let success = false
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });

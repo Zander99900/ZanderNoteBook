@@ -2,13 +2,21 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import Addnote from "./Addnote";
+import { useNavigate } from "react-router-dom";
 
-const Notes = () => {
+
+const Notes = (props) => {
+  let navigate = useNavigate()
   // fetching notes from contextAPI
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
   useEffect(() => {
-    getNotes();
+    if(localStorage.getItem('auth-token')){
+      getNotes();
+    }
+    else{
+      navigate('/login')
+    }
     // eslint-disable-next-line
   }, []);
   //useRef is used to give reference to any element
@@ -34,6 +42,7 @@ const Notes = () => {
   const handleClick = (e) => {
     editNote(note.id, note.etitle, note.edescription, note.etag);
     refClose.current.click();
+    props.showAlert("Updated Successfully","success")
   };
 
   const onChange = (e) => {
@@ -42,7 +51,7 @@ const Notes = () => {
   };
   return (
     <>
-      <Addnote />
+      <Addnote showAlert={props.showAlert}/>
       <button
         ref={ref}
         type="button"
@@ -145,7 +154,7 @@ const Notes = () => {
       <div className="row my-3">
         <h2>Your Note</h2>
         {/* Displaying notes fetched from above line 4 & 5 */}
-        {notes.map((note) => {
+        {notes.map((note) =>  {
           return (
             <Noteitem key={note._id} updateNote={updateNote} note={note} />
           );
