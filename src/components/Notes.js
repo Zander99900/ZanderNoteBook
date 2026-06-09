@@ -83,7 +83,7 @@ const Notes = (props) => {
               ></button>
             </div>
             <div className="modal-body">
-              <form className="my-3">
+              <form className="my-3" onSubmit={(e) => { e.preventDefault(); handleClick(e); }}>
                 <div className="mb-3">
                   <label htmlFor="title" className="form-label">
                     Title
@@ -156,7 +156,7 @@ const Notes = (props) => {
         {/* Displaying notes fetched from above line 4 & 5 */}
         {notes.map((note) =>  {
           return (
-            <Noteitem key={note._id} updateNote={updateNote} note={note} />
+            <Noteitem key={note._id} updateNote={updateNote} note={note} showAlert={props.showAlert} />
           );
         })}
       </div>

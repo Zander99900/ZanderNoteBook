@@ -29,7 +29,7 @@ const Addnote = (props) => {
   return (
     <div className="container my-3">
       <h2>Add a Note</h2>
-      <form className="my-3">
+      <form className="my-3" onSubmit={handleClick}>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">
             Title
@@ -73,16 +73,12 @@ const Addnote = (props) => {
             name="tag"
             value={note.tag}
             onChange={onChange}
-            minLength={5}
-            required
-            placeholder="Tag Must be 5 characters long"
+            placeholder="Enter Tag (Optional)"
           />
         </div>
         <button
-          disabled={note.title.length < 5 || note.description.length < 5}
           type="submit"
           className="btn btn-primary"
-          onClick={handleClick}
         >
           Add Note
         </button>
