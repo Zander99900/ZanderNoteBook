@@ -19,7 +19,7 @@ const Signup = (props) => {
       props.showAlert("Passwords Do not match", "danger");
     } else {
       const response = await fetch(
-        "http://localhost:5000/api/auth/createuser",
+        "https://zandernotebook-production.up.railway.app:8080/api/auth/createuser",
         {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           headers: {
