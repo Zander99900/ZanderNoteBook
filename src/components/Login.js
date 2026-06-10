@@ -9,7 +9,7 @@ const Login = (props) => {
     //To prevent page reload
     e.preventDefault();
     //API Call
-    const response = await fetch("https://zandernotebook-production.up.railway.app:8080/api/auth/login", {
+    const response = await fetch("https://notebook-backend-bi4l.onrender.com/api/auth/login", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
         "Content-Type": "application/json",
